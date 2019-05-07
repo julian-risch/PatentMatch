@@ -1,0 +1,60 @@
+    {
+"settings": {
+
+    "index": { "number_of_shards": "1","number_of_replicas": "0",
+        "analysis": { "analyzer": { "default": { "filter": ["standard","lowercase","stop","porter_stem"],"type": "custom","tokenizer": "standard"}}}}},      
+      
+      "mappings": { "news_article": { "properties": {
+            "list_of_tags": {
+                "null_value": "NULL",
+                "type": "keyword"
+            },
+            "keywords": {
+                "null_value": "NULL",
+                "type": "keyword"
+            },
+            "author": {
+                "null_value": "NULL",
+                "type": "keyword"
+            },
+            "taxonomy": {
+                "type": "keyword"
+            },
+            "body": {
+                "type": "text"
+            },
+            "title": {
+                "analyzer" : "default",
+                "type": "text"
+            },
+            "url": {
+                "type": "keyword"
+            },
+            "opinion": {
+                "type": "boolean"
+            },
+            "premium": {
+                "type": "boolean"
+            },
+            "news_keywords": {
+                "null_value": "NULL",
+                "type": "keyword"
+            },
+            "subtitle": {
+                "analyzer" : "default",
+                "type": "text"
+            },
+            "publication_date": {
+                "format" : "date_optional_time",
+                "ignore_malformed" : "true",
+                "type":   "date"
+            },
+            "article_tag": {
+                "null_value": "NULL",
+                "type": "keyword"
+            },
+            "category": {
+                "null_value": "NULL",
+                "type": "keyword"
+                }
+            } } } }
