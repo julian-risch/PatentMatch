@@ -263,7 +263,7 @@ public class PatentMinerOfficeActions implements PatentMinerConstants {
             while((doc = reader.readMap()) != null){
 
                 IndexRequest request = new IndexRequest(index);
-                request.id(doc.get("ifw_number").concat(doc.get("action_type")).concat("action_subtype"));
+                request.id(doc.get("ifw_number").concat(doc.get("action_type")).concat(doc.get("action_subtype")));
                 request.source(doc, XContentType.JSON);
                 request.opType(DocWriteRequest.OpType.CREATE);
                 builder.add(request);
