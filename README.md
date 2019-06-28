@@ -26,6 +26,7 @@
 - Source of dataset documentation: https://bulkdata.uspto.gov/data/patent/office/actions/bigdata/2017/USPTO%20Patent%20Prosecution%20Research%20Data_Unlocking%20Office%20Action%20Traits.pdf
 
 The dataset consists of three sub-datasets.
+###### Office Actions
 - Name: "Office Actions"
 - Fields: rejection_dp, closing_missing, header_missing, uspc_subclass, allowed_claims, signature_type, fp_missing, rejection_101, rejection_112, cite102_gt1, rejection_102, rejection_fp_mismatch, rejection_103, document_cd, ifw_number, uspc_class, cite103_gt3, art_unit, cite103_max, app_id, cite103_eq1, mail_dt, objection
 - Number of dataset files: 1
@@ -33,6 +34,7 @@ The dataset consists of three sub-datasets.
 - Number of documents uploaded to elasticsearch: 4.384.532
 - Comment: Since the documentation specifies the number of office actions to 4.4 million, the uploaded number of documents appears to be complete.
 
+###### Rejections
 - Name: "Rejections"
 - Fields: action_type, alice_in, header_missing, action_subtype, rejection_101, rejection_102, rejection_103, bilski_in, art_unit, app_id, cite103_eq1, claim_numbers, mail_dt, objection, rejection_dp, closing_missing, uspc_subclass, allowed_claims, fp_missing, mayo_in, rejection_112, cite102_gt1, rejection_fp_mismatch, myriad_in, document_cd, ifw_number, cite103_gt3
 - Number of dataset files: 1
@@ -40,6 +42,7 @@ The dataset consists of three sub-datasets.
 - Number of documents uploaded to elasticsearch: 9.732.522 
 - Comment: The documentation specifies 10.1 million unique document-action pairs in the rejections data file (page 10, last paragraph). Relying on the correctness of that number,  were not uploaded yet.
 
+###### Citations
 - Name: "Citations"
 - Fields: action_type, citation_pat_pgpub_id, header_missing, form1449, action_subtype, rejection_101, rejection_102, rejection_103, form892, art_unit, app_id, cite103_eq1, mail_dt, objection, rejection_dp, closing_missing, uspc_subclass, allowed_claims, fp_missing, rejection_112, cite102_gt1, rejection_fp_mismatch, document_cd, ifw_number, cite103_gt3, parsed, citation_in_oa
 - Number of dataset files: 1
