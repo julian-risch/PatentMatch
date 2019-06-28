@@ -1,6 +1,6 @@
 # Documentation of Progress
 
-## Utilize Datasets 
+## Step 1: Utilize Datasets 
 ### Datasets
 ##### Patent Applications
 - **Source of dataset**: https://bulkdata.uspto.gov/
@@ -32,15 +32,15 @@ The dataset consists of three sub-datasets.
 - **Number of dataset files**: 1
 - **Number of utilized files**: 1
 - **Number of documents uploaded to elasticsearch**: 4.384.532
-- **Comment**: Since the documentation specifies the number of office actions to 4.4 million, the uploaded number of documents appears to be complete.
+- **Comment**: Since the documentation specifies the number of office actions to 4.4 million, the uploaded number of office actions appears to be complete.
 
 ###### Rejections
 - **Name**: "Rejections"
 - **Fields**: action_type, alice_in, header_missing, action_subtype, rejection_101, rejection_102, rejection_103, bilski_in, art_unit, app_id, cite103_eq1, claim_numbers, mail_dt, objection, rejection_dp, closing_missing, uspc_subclass, allowed_claims, fp_missing, mayo_in, rejection_112, cite102_gt1, rejection_fp_mismatch, myriad_in, document_cd, ifw_number, cite103_gt3
 - **Number of dataset files**: 1
 - **Number of utilized files**: 1
-- **Number of documents uploaded to elasticsearch**: 9.732.522 
-- **Comment**: The documentation specifies 10.1 million unique document-action pairs in the rejections data file (page 10, last paragraph). Relying on the correctness of that number,  were not uploaded yet.
+- **Number of documents uploaded to elasticsearch**: 10.113.601  
+- **Comment**: The documentation specifies 10.1 million unique document-action pairs in the rejections data file (page 10, last paragraph). Relying on the correctness of that number, the uploaded number of rejections appears to be complete.
 
 ###### Citations
 - **Name**: "Citations"
@@ -48,8 +48,10 @@ The dataset consists of three sub-datasets.
 - **Number of dataset files**: 1
 - **Number of utilized files**: 1
 - **Number of documents uploaded to elasticsearch**: 52.546.031 
-- **Comment**: The documentation specifies 58.9 million unique application-citation pairs in the citations data file (page 10, last paragraph). Relying on the correctness of that number, 6 million application-citation pairs were not uploaded yet.
+- **Comment**: The documentation specifies 58.9 million unique application-citation pairs in the citations data file (page 10, last paragraph). Relying on the correctness of that number, 6 million application-citation pairs were not uploaded. The reason was not evaluated yet.
 
+### Dataset Patent Miner and Elasticsearch
+Elasticsearch is a search engine that allows to query indexed data. To make use of the patent datasets, we upload and index the data into our elasticsearch engine, so we have an uniform and instant access to the data via queries. Further work is based on that access. To transfer our data to elasticsearch, we deployed an XML/CSV Parser that parses each file, extracts all entries with its relevant informations. The extracted information is then uploaded into a predefined schema to our elasticsearch engine. The predefined schema corresponds to the "Fields" listing of each processed dataset.
 
 # Technical FAQ
 
