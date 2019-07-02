@@ -50,7 +50,7 @@ The dataset consists of three sub-datasets.
 - **Number of documents uploaded to elasticsearch**: 52.546.031 
 - **Comment**: The documentation specifies 58.9 million unique application-citation pairs in the citations data file (page 10, last paragraph). Relying on the correctness of that number, 6 million application-citation pairs were not uploaded. The reason was not evaluated yet.
 
-###### EP full-text data for text analytics
+##### EP full-text data for text analytics
 The dataset will be split into two sub-datasets. Dataset 1 "EP_Patent_Applications" contains all patent applications with abstract, title, claims,...,citation ids. Dataset 2 "EP_Citations" contains all citation_ids with the corresponding citation information. Dataset 1 and 2 are connected via those citation ids.
 
 - **Open Question**
