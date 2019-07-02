@@ -50,6 +50,28 @@ The dataset consists of three sub-datasets.
 - **Number of documents uploaded to elasticsearch**: 52.546.031 
 - **Comment**: The documentation specifies 58.9 million unique application-citation pairs in the citations data file (page 10, last paragraph). Relying on the correctness of that number, 6 million application-citation pairs were not uploaded. The reason was not evaluated yet.
 
+###### EP full-text data for text analytics
+The dataset will be split into two sub-datasets. Dataset 1 "EP_Patent_Applications" contains all patent applications with abstract, title, claims,...,citation ids. Dataset 2 "EP_Citations" contains all citation_ids with the corresponding citation information. Dataset 1 and 2 are connected via those citation ids.
+
+- **Open Question**
+Questions appeared during the exploration of the sample file (https://www.epo.org/searching-for-patents/data/bulk-data-sets/text-analytics.html#tab-1). In line 299 ("EP	3273396	A3	20180404	en	SRPRT"), citation with "dnum=US2014232569A1" is listed. However, the corresponding grant field "publ_docNo"/"index" with "2014232569" is not found. When following the citation link (https://worldwide.espacenet.com/publicationDetails/biblio?CC=US&NR=2014232569&KC=&FT=E&locale=en_EP) from the epo dataset, one finds at the bottom of the webpage "Also published as:	US9080878 (B2) WO2014130194 (A1)".
+US9080878 is again found in our "Patent Grants" dataset. This issue suggests two causes: 1) The corresponding patent record was not correctly uploaded into our elasticsearch engine, 2) There is some contentwise related issue from the patent domain, we have to take care of. 
+
+- **Name** "EP_Patent_Applications"
+- **Fields**: 
+- **Number of dataset files**: 
+- **Number of utilized files**: 
+- **Number of documents uploaded to elasticsearch**: 
+- **Comment**: not uploaded yet. parser and uploader are in development.
+
+- **Name** "EP_Citations"
+- **Fields**: 
+- **Number of dataset files**: 
+- **Number of utilized files**: 
+- **Number of documents uploaded to elasticsearch**: 
+- **Comment**: not uploaded yet. parser and uploader are in development.
+
+
 ### Dataset Patent Miner and Elasticsearch
 Elasticsearch is a search engine that allows to query indexed data. To make use of the patent datasets, we upload and index the data into our elasticsearch engine, so we have an uniform and instant access to the data via queries. Further work is based on that access. To transfer our data to elasticsearch, we deployed an XML/CSV Parser that parses each file, extracts all entries with its relevant informations. The extracted information is then uploaded into a predefined schema to our elasticsearch engine. The predefined schema corresponds to the "Fields" listing of each processed dataset.
 
