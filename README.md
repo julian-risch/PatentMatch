@@ -82,6 +82,10 @@ US9080878 is again found in our "Patent Grants" dataset. This issue suggests two
 ### Dataset Patent Miner and Elasticsearch
 Elasticsearch is a search engine that allows to query indexed data. To make use of the patent datasets, we upload and index the data into our elasticsearch engine, so we have an uniform and instant access to the data via queries. Further work is based on that access. To transfer our data to elasticsearch, we deployed an XML/CSV Parser that parses each file, extracts all entries with its relevant informations. The extracted information is then uploaded into a predefined schema to our elasticsearch engine. The predefined schema corresponds to the "Fields" listing of each processed dataset.
 
+## Step 1: Utilize Datasets 
+### Description of uploaded data:  EP full-text data for text analytics (EP_Patent_Applications/EP_Citations)
+
+
 # Technical FAQ
 
 ## patent-indexing
