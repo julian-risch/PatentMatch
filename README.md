@@ -51,7 +51,9 @@ The dataset consists of three sub-datasets.
 - **Comment**: The documentation specifies 58.9 million unique application-citation pairs in the citations data file (page 10, last paragraph). Relying on the correctness of that number, 6 million application-citation pairs were not uploaded. The reason was not evaluated yet.
 
 ##### EP full-text data for text analytics
-The dataset will be split into two sub-datasets. Dataset 1 "EP_Patent_Applications" contains all patent applications with abstract, title, claims,...,citation ids. Dataset 2 "EP_Citations" contains all citation_ids with the corresponding citation information. Dataset 1 and 2 are connected via those citation ids. The unique id of dataset 1 is a concatenation of "Application Number" + "Application Category" + "Application Date". The unique id of dataset 2 is a concatenation of "Application Number" + "Application Category" + "Application Date" + "Citation Number", whereas citation number is the citation count that is annotated to each citation within one single application. To find any citations for an application, one therefore has to iterate through the citation ids and concatenate them to the current application id.
+The dataset will be split into two sub-datasets. Dataset 1 "EP_Patent_Applications" contains all patent applications with abstract, title, claims,...,citation ids. Dataset 2 "EP_Citations" contains all citation_ids with the corresponding citation information. Dataset 1 and 2 are connected via those citation ids. The unique id of dataset 1 is a concatenation of "Application Number" + "Application Category" + "Application Date". The unique id of dataset 2 is a concatenation of "Application Number" + "Application Category" + "Application Date" + "Citation Number", whereas citation number is the citation count that is annotated to each citation within one single application. To find any citations for an application, one therefore has to iterate through the citation ids and concatenate them to the current application id. Applications of this dataset do not necessarily contain all fields that are referenced in this report. Some entries are missing its application dates. Those entries are ignored and not uploaded.
+Source: https://www.epo.org/searching-for-patents/data/bulk-data-sets/text-analytics.html
+Source Description: http://documents.epo.org/projects/babylon/eponet.nsf/0/2BC42D0D0015756EC125840B00277AEF/$FILE/EP_full_text_data_for_text_analytics-user_guide_v1.0_en.pdf
 
 - **Open Question**
 Questions appeared during the exploration of the sample file (https://www.epo.org/searching-for-patents/data/bulk-data-sets/text-analytics.html#tab-1). In line 299 ("EP	3273396	A3	20180404	en	SRPRT"), citation with "dnum=US2014232569A1" is listed. However, the corresponding grant field "publ_docNo"/"index" with "2014232569" is not found. When following the citation link (https://worldwide.espacenet.com/publicationDetails/biblio?CC=US&NR=2014232569&KC=&FT=E&locale=en_EP) from the epo dataset, one finds at the bottom of the webpage "Also published as:	US9080878 (B2) WO2014130194 (A1)".
@@ -59,19 +61,19 @@ US9080878 is again found in our "Patent Grants" dataset. This issue suggests two
 
 ###### EP_Patent_Applications
 - **Name** "EP_Patent_Applications"
-- **Fields**: 
+- **Fields**: Application_Category, Citation_IDs, Claims, Amended_Claims_Statements, Application_Date, Citation_IPCR_Classification, Description, Abstract, Amended_Claims, Application_Number, Title, Publication_URL
 - **Number of dataset files**: 35
 - **Number of utilized files**: 35
 - **Number of documents uploaded to elasticsearch**: 
-- **Comment**: upload in progress. parser/uploader (parse.py) finished.
+- **Comment**: upload in progress. parser/uploader development (parse.py) finished.
 
 ###### EP_Citations
 - **Name** "EP_Citations"
-- **Fields**: Doc_Number, Dnum, Date, Country, kind, publication_url, nplcit, name, Category_A, Category_D, Category_E, Category_P, Category_O, Category_L, Category_X, Category_T, Category_Y, rel-passage_D, rel-passage_A,, rel-passage_L, rel-passage_E, rel-passage_T, rel-passage_P, rel-passage_O, rel-passage_Y, rel-passage_X
+- **Fields**: Doc_Number, Dnum, Date, Country, Kind, Publication_url, Nplcit, Name, Category_A, Category_D, Category_E, Category_P, Category_O, Category_L, Category_X, Category_T, Category_Y, Rel-passage_D, Rel-passage_A, Rel-passage_L, Rel-passage_E, Rel-passage_T, Rel-passage_P, Rel-passage_O, Rel-passage_Y, Rel-passage_X
 - **Number of dataset files**: 35
 - **Number of utilized files**: 35
 - **Number of documents uploaded to elasticsearch**: 
-- **Comment**: upload in progress. parser/uploader (parse.py) finished.
+- **Comment**: upload in progress. parser/uploader development (parse.py) finished.
 
 
 ### Dataset Patent Miner and Elasticsearch
