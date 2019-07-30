@@ -86,16 +86,16 @@ Elasticsearch is a search engine that allows to query indexed data. To make use 
 ### Description of uploaded data
 #### EP full-text data for text analytics (EP_Patent_Applications/EP_Citations)
 <p align="center">
-  <img width="460" height="300" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_applications.png">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_applications.png">
 </p>
 <p align="center">
-  <img width="460" height="300" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_citations.png">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_citations.png">
 </p>
 <p align="center">
-  <img width="460" height="300" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations.png">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations.png">
 </p>
 <p align="center">
-  <img width="460" height="300" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations_log.png">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations_log.png">
 </p>
 # Technical FAQ
 
