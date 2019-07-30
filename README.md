@@ -88,11 +88,15 @@ Elasticsearch is a search engine that allows to query indexed data. To make use 
 <p align="center">
   <img width="460" height="300" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_applications.png">
 </p>
-![Image description](https://github.com/cgsee1/patent-indexing/blob/master/dataset_applications.png)
-![Image description](https://github.com/cgsee1/patent-indexing/blob/master/dataset_citations.png)
-![Image description](https://github.com/cgsee1/patent-indexing/blob/master/ep_citations.png)
-![Image description](https://github.com/cgsee1/patent-indexing/blob/master/ep_citations_log.png)
-
+<p align="center">
+  <img width="460" height="300" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_citations.png">
+</p>
+<p align="center">
+  <img width="460" height="300" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations.png">
+</p>
+<p align="center">
+  <img width="460" height="300" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations_log.png">
+</p>
 # Technical FAQ
 
 ## patent-indexing
