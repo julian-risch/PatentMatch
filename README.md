@@ -85,11 +85,10 @@ Elasticsearch is a search engine that allows to query indexed data. To make use 
 ## Step 1: Utilize Datasets 
 ### Description of uploaded data
 #### EP full-text data for text analytics (EP_Patent_Applications/EP_Citations)
-<object data="https://github.com/cgsee1/patent-indexing/blob/master/tables.pdf" type="application/pdf" width="700px" height="700px">
-    <embed src="https://github.com/cgsee1/patent-indexing/blob/master/tables.pdf">
-        <p>This browser does not support PDFs. Please download the PDF to view it: <a href="https://github.com/cgsee1/patent-indexing/blob/master/tables.pdf">Download PDF</a>.</p>
-    </embed>
-</object>
+![Image description](https://github.com/cgsee1/patent-indexing/blob/master/dataset_applications.png)
+![Image description](https://github.com/cgsee1/patent-indexing/blob/master/dataset_citations.png)
+![Image description](https://github.com/cgsee1/patent-indexing/blob/master/ep_citations.png)
+![Image description](https://github.com/cgsee1/patent-indexing/blob/master/ep_citations_log.png)
 
 # Technical FAQ
 
