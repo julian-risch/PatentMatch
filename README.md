@@ -97,6 +97,9 @@ Elasticsearch is a search engine that allows to query indexed data. To make use 
 <p align="center">
   <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations_log.png">
 </p>
+<p align="center">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/amounts.png">
+</p>
 # Technical FAQ
 
 ## patent-indexing
