@@ -100,6 +100,10 @@ Elasticsearch is a search engine that allows to query indexed data. To make use 
 <p align="center">
   <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/amounts.png">
 </p>
+#### New Dataframe, combined from EP_Patent_Applications/EP_Citations (to be described)
+<p align="center">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/dataframe_statistics.png">
+</p>
 # Technical FAQ
 
 ## patent-indexing
