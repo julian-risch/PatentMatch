@@ -1,0 +1,36 @@
+Alle nachfolgenden Skripte betreffen das EP Patents Datenset.
+Achtung: Alle Skripts enthalten noch ggf. vertrauliche Informationen, wie Serveradressen oder Authentifizierungsmechanismen.
+Auch wenn Dateien für die Erzeugung positiver und negativer Samples gekennzeichnet sind, müssen in der Regel noch Dateipfade oder anderes offensichtliches angepasst werden.
+
+0_parse.py
+Die zum Datenset gehörigen .txt Dateien im XML Format werden geparsed und in zwei Indices nach Elasticsearch hochgeladen, die ebenfalls durch das Skript angelegt werden. Die Indices enthalten bereits entsprechende Mappings, die jedes Datum mit Informationen zu Titel, Abstract, Description, Claim, Amended Claims, Amended Claims Statements, Search Reports und Publication Url versehen.  Die Primär-IDs sind zusammengesetzt aus Patentnummer, Kategorie der Publikation und Veröffentlichungsdatum, um Dopplungen auszuschließen. 
+
+1_createDataFrameClaims_positiveSamples.py / 1_createDataFrameClaims_negativeSamples.py
+Die in Elasticsearch abgelegten Daten werden fortan verwendet, um das Datenset Schritt für Schritt zu erstellen und zu strukturieren. Die Ergebnisse selbst werden in CSV's vorgenommen, die Daten in Elasticsearch werden nicht geändert. Da wir später diesselben Skripte verwendet haben, um nicht nur positive (Kategorie X), sondern auch negative Samples (Kategorie A) zu generieren, sind nur Skripte mit größeren Unterschieden entsprechend separiert. Normalerweise besteht nur eine Anpassung hinsichtlich der übergebenen Eingabedateien/-pfade. Abgespeicherte CSVs werden für positive und negative Samples, falls nicht explizit anders erwähnt, immer separat gespeichert und weiterverarbeitet. 
+Mit diesen Skript wird eine CSV ("frame.csv") erstellt, die jeweils Informationen zur "Patent Application ID","Patent Citation ID" (zitiertes Patent des Search Report Writers, das ID Format entspricht nicht der Patent Application ID in Elasticsearch, sondern enthält die Originaldaten), "Application Claim Number" (Nummer des Claims im Patent), "Application Claim Text" (Der originale Claim-Text), "Related Passages Against Claim" (Angaben des Search Report Writers welche Passagen des zitierten Patents relevant sind) und "Category" (Kategorie X für positive /A für negative) enthält. Dabei enthält jedes Datum nur genau einen Claim.
+Es werden alle Patente in den Datensatz miteinbezogen, die Informationen in den Feldern "citation_ids" und "claims" , sowie Zitationen im Search Report der Kategorie X bzw. A enthalten.
+
+2_extractCitedPatentText.py 
+Die Angaben aus des Search Report Writers aus "Related Passages Against Claim" werden geparsed und in ein verarbeitbares Format übertragen. So wird beispielsweise der Text "paragraph 0021 - paragraph 0023" als [21,22,23] in einer neuen Spalte "paragraphes" abgespeichert. Die Inhalte werden in "frame_v2.csv" abgespeichert. Durch die bereits sehr große zu verarbeitende Datenmenge sind häufig Fehler nach einigen hunderttausend verarbeiteten Patenten aufgetreten. Deshalb wurde dieses Skript mehrere Male (ca. 10 mal) ausgeführt und die CSVs entsprechend aufsteigend nummeriert. 
+
+3_mergeFramesWithExtractedParagraphes.py
+Die im Schritt zuvor mehrfach erzeugten CSV's werden zu einer einzigen gemerged
+
+3_optional_parseEquivalentsLog.py / 3_optional_opsAPI.py (nicht verwendet für Datensatz)
+Gleiche Patente werden vielfach in mehreren Rechträumen veröffentlicht, um international rechtlichen Schutz zu genießen. In diesem optionalen Schritt (wurde für das finale Datenset nicht verwendet) werden alle Patente aus Elasticsearch auf äquivalente Identikatoren überprüft. Dies ermöglicht der Extraktion zitierter Passagen aus dritten Patenten im nächsten Schritt bei Bedarf auf weitere indexierte Patente zurückzugreifen. Beispielsweise könnte für eine Zitation auf ein US-Patent das äquivalente EU-Patent gefunden werden und dieses für die Extraktion der betreffenden Textabschnitte gefunden werden.
+
+4_createFrameWithparagraphTexts_withoutEquivalents.py
+Dieses Skript extrahiert die relevanten Passagen der zitierten Patente, insofern sie in Elasticsearch verfügbar sind und reichert ein Datenset damit an. Wie zuvor, wurde auch dieses Skript in der Regel mehrfach ausgeführt, um nach Fehlern die Arbeit fortzusetzen. Es wurden mehrere CSVs erzeugt. 
+
+5_mergeFramesWithExtractedParagraphes.py
+Dieses Skript führt die zuvor erzeugten CSVs wieder zu einer einzigen zusammen.
+
+6_createDatasetsFromCSV.py
+Das finale Datenset wird erzeugt. Bisher lagen alle relevanten Passagen aus einem zitierten Patent zu einem Claim unsepariert vor. In diesem Skript wird das Datenset so strukturiert, dass jedes Datum aus genau einem Claim und einem zugehörigen Paragraphen besteht. Der Output ist das finale Datenset, welches (jeweils für positive und negative Samples) aus einer master und satellite CSV besteht. Die master CSV enthält jeweils (separat für positive / negative Samples) globale Primärschlüssel (hochgezählt) für die Claims mit ihrem jeweiligen Text und den dazu referenzierten Paragraphen. Die satellite CSV beinhaltet die globalen Claimschlüssel und ihren Text, sowie genau einen zitierten Paragraphen zu diesen Claim und weitere Informationen zu diesem Datum.
+
+7_createDatasets.py (optional)
+Dieses Skript erzeugt aus positiven und negativen Samples ein Trainings-,Validation- und Testdatenset und wendet verschiedene reguläre Ausdrücke an, um die Datenqualität zu erhöhen (Entfernung von verbliebenden Tag-Zeichen, Anführungsstrichen bzw. werden alle Zeichen entfernt, die kein Buchstabe oder keine Zahl sind). Die drei Datensets werden als tsv abgespeichert und wurden in FARM als Eingabe verwendet. Es wurden dadurch keine Tokenization Fehler mehr erzeugt.
+
+
+
+
