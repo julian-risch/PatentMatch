@@ -1,7 +1,96 @@
-# Documentation of Progress
+# Documentation
 
-## Step 1: Utilize Datasets 
+## Step 0: Parse and utilize datasets 
 ### Datasets
+
+##### EP full-text data for text analytics
+The dataset is split into two sub-datasets. Dataset 1 "EP_Patent_Applications" contains all patent applications with abstract, title, claims,...,citation ids. Dataset 2 "EP_Citations" contains all citation_ids with the corresponding citation information. Dataset 1 and 2 are connected via those citation ids. The unique id of dataset 1 is a concatenation of "Application Number" + "Application Category" + "Application Date". The unique id of dataset 2 is a concatenation of "Application Number" + "Application Category" + "Application Date" + "Citation Number", whereas citation number is the citation count that is annotated to each citation within one single application. To find any citations for an application, one therefore has to iterate through the citation ids and concatenate them to the current application id. Applications of this dataset do not necessarily contain all fields that are referenced in this report. Some entries are missing its application dates. Those entries are ignored and not uploaded.
+
+- **Dataset Source**
+https://www.epo.org/searching-for-patents/data/bulk-data-sets/text-analytics.html
+
+- **Dataset Description** http://documents.epo.org/projects/babylon/eponet.nsf/0/2BC42D0D0015756EC125840B00277AEF/$FILE/EP_full_text_data_for_text_analytics-user_guide_v1.0_en.pdf
+
+###### EP_Patent_Applications
+- **Name** "EP_Patent_Applications"
+- **Fields**: Application_Category, Citation_IDs, Claims, Amended_Claims_Statements, Application_Date, Citation_IPCR_Classification, Description, Abstract, Amended_Claims, Application_Number, Title, Publication_URL
+- **Number of dataset files**: 35
+- **Number of utilized files**: 35
+- **Number of documents uploaded to elasticsearch**: 
+
+###### EP_Citations
+- **Name** "EP_Citations"
+- **Fields**: Doc_Number, Dnum, Date, Country, Kind, Publication_url, Nplcit, Name, Category_A, Category_D, Category_E, Category_P, Category_O, Category_L, Category_X, Category_T, Category_Y, Rel-passage_D, Rel-passage_A, Rel-passage_L, Rel-passage_E, Rel-passage_T, Rel-passage_P, Rel-passage_O, Rel-passage_Y, Rel-passage_X
+- **Number of dataset files**: 35
+- **Number of utilized files**: 35
+- **Number of documents uploaded to elasticsearch**: 
+
+### Dataset Patent Miner and Elasticsearch
+Elasticsearch is a search engine that allows to query indexed data. To make use of the patent datasets, we upload and index the data into our elasticsearch engine, so we have an uniform and instant access to the data via queries. Further work is based on that access. To transfer our data to elasticsearch, we deployed an XML/CSV Parser that parses each file, extracts all entries with its relevant informations. The extracted information is then uploaded into a predefined schema to our elasticsearch engine. The predefined schema corresponds to the "Fields" listing of each processed dataset. 
+
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/0_parse.py'>---> Go to file <---</a>
+
+### Description of uploaded data
+#### EP full-text data for text analytics (EP_Patent_Applications/EP_Citations)
+<p align="center">
+  <img width="530" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_applications.png">
+</p>
+<p align="center">
+  <img width="500" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_citations.png">
+</p>
+<p align="center">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations.png">
+</p>
+<p align="center">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations_log.png">
+</p>
+<p align="center">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/amounts.png">
+</p>
+
+#### New Dataframe, combined from EP_Patent_Applications/EP_Citations
+
+<p align="center">
+  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/dataframe_statistics.png">
+</p>
+
+## Step 1: Start creating and CSV dataset: Filter categories and separate claims
+The data stored in Elasticsearch will be used from now on to create and structure the dataset step by step. The results themselves are done in CSV's, the data in Elasticsearch is not changed. Since we later used the same scripts to generate not only positive (category X) but also negative samples (category A), only scripts with major differences are separated accordingly. We produce a CSV file, where each row contains information about the "Patent Application ID", "Patent Citation ID" (one quoted patent in search report, the ID format does not correspond to the Patent Application ID in Elasticsearch, but contains the original data patent id), "Application Claim Number" (number of the claim in the patent), "Application Claim Text" (the original claim text), "Related Passages Against Claim" (information from the Search Report Writer which passages of the cited patent are relevant) and "Category" (Category X for positive /A for negative) Each date contains only one claim. All patents that are included in the data are filtered for containing information within the fields "citation_ids" and "claims", as well as citations in the Search Report of category X or A. 
+A general remark to the linked scripts: As we create one dataset for positive samples and another dataset for negatives samples, we process them separaretly with the help of the same scripts. Usually there is only an adjustment regarding the passed input files/paths. Input files/paths and potential authentification credentials have to adjusted individually to get the scripts working. Two separate scripts are only linked, if major differences occur in the script.
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/1_createDataFrameClaims_positiveSamples.py'>---> Go to file for positive samples <---</a>
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/1_createDataFrameClaims_NegativeSamples.py'>---> Go to file for negative samples <---</a>
+
+
+# Technical FAQ
+
+## patent-indexing
+1. parse patent XML files with python and extract patent ID and claim for each patent
+2. index patents with elasticsearch, which is running on our isfet server
+
+#### To access elasticsearch on isfet from our idun server:
+1. connect with ssh to idun
+2. activate your pythonvirtual environment, eg;
+source activate tensorflowenv
+
+3. install elasticsearch dependency from https://elasticsearch-py.readthedocs.io/en/master/ 
+pip install elasticsearch
+4. start python session or jupyter notebook
+python
+5. connect to elasticsearch 
+from elasticsearch import Elasticsearch
+ES = Elasticsearch(['172.16.64.23:9200'])
+print(ES.indices.exists('new_telegraph’))
+
+#### es_helpers.py
+This file is two years old so it might not work with the current elasticsearch version 7.
+Use this as example code to create indices.
+
+#### es_mappings.json
+This file contains a so called mapping: https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
+
+# Additional Remarks
+Though only the EP full-text data for text analytics dataset was utilized to keep focus, we started with several more datasets that were uploaded and examined in Elasticsearch. They are listed and described below.
+
 ##### Patent Applications
 - **Source of dataset**: https://bulkdata.uspto.gov/
 - **Name**: "Patent Application Full Text Data (No Images) (MAR 15, 2001 - PRESENT)"
@@ -49,87 +138,3 @@ The dataset consists of three sub-datasets.
 - **Number of utilized files**: 1
 - **Number of documents uploaded to elasticsearch**: 52.546.031 
 - **Comment**: The documentation specifies 58.9 million unique application-citation pairs in the citations data file (page 10, last paragraph). Relying on the correctness of that number, 6 million application-citation pairs were not uploaded. The reason was not evaluated yet.
-
-##### EP full-text data for text analytics
-The dataset will be split into two sub-datasets. Dataset 1 "EP_Patent_Applications" contains all patent applications with abstract, title, claims,...,citation ids. Dataset 2 "EP_Citations" contains all citation_ids with the corresponding citation information. Dataset 1 and 2 are connected via those citation ids. The unique id of dataset 1 is a concatenation of "Application Number" + "Application Category" + "Application Date". The unique id of dataset 2 is a concatenation of "Application Number" + "Application Category" + "Application Date" + "Citation Number", whereas citation number is the citation count that is annotated to each citation within one single application. To find any citations for an application, one therefore has to iterate through the citation ids and concatenate them to the current application id. Applications of this dataset do not necessarily contain all fields that are referenced in this report. Some entries are missing its application dates. Those entries are ignored and not uploaded.
-
-- **Dataset Source**
-https://www.epo.org/searching-for-patents/data/bulk-data-sets/text-analytics.html
-
-- **Dataset Description** http://documents.epo.org/projects/babylon/eponet.nsf/0/2BC42D0D0015756EC125840B00277AEF/$FILE/EP_full_text_data_for_text_analytics-user_guide_v1.0_en.pdf
-
-- **Open Question**
-Questions appeared during the exploration of the sample file (https://www.epo.org/searching-for-patents/data/bulk-data-sets/text-analytics.html#tab-1). In line 299 ("EP	3273396	A3	20180404	en	SRPRT"), citation with "dnum=US2014232569A1" is listed. However, the corresponding grant field "publ_docNo"/"index" with "2014232569" is not found. When following the citation link (https://worldwide.espacenet.com/publicationDetails/biblio?CC=US&NR=2014232569&KC=&FT=E&locale=en_EP) from the epo dataset, one finds at the bottom of the webpage "Also published as:	US9080878 (B2) WO2014130194 (A1)".
-US9080878 is again found in our "Patent Grants" dataset. This issue suggests two causes: 1) The corresponding patent record was not correctly uploaded into our elasticsearch engine, 2) There is some contentwise related issue from the patent domain, we have to take care of. 
-
-###### EP_Patent_Applications
-- **Name** "EP_Patent_Applications"
-- **Fields**: Application_Category, Citation_IDs, Claims, Amended_Claims_Statements, Application_Date, Citation_IPCR_Classification, Description, Abstract, Amended_Claims, Application_Number, Title, Publication_URL
-- **Number of dataset files**: 35
-- **Number of utilized files**: 35
-- **Number of documents uploaded to elasticsearch**: 
-- **Comment**: upload in progress. parser/uploader development (parse.py) finished.
-
-###### EP_Citations
-- **Name** "EP_Citations"
-- **Fields**: Doc_Number, Dnum, Date, Country, Kind, Publication_url, Nplcit, Name, Category_A, Category_D, Category_E, Category_P, Category_O, Category_L, Category_X, Category_T, Category_Y, Rel-passage_D, Rel-passage_A, Rel-passage_L, Rel-passage_E, Rel-passage_T, Rel-passage_P, Rel-passage_O, Rel-passage_Y, Rel-passage_X
-- **Number of dataset files**: 35
-- **Number of utilized files**: 35
-- **Number of documents uploaded to elasticsearch**: 
-- **Comment**: upload in progress. parser/uploader development (parse.py) finished.
-
-
-### Dataset Patent Miner and Elasticsearch
-Elasticsearch is a search engine that allows to query indexed data. To make use of the patent datasets, we upload and index the data into our elasticsearch engine, so we have an uniform and instant access to the data via queries. Further work is based on that access. To transfer our data to elasticsearch, we deployed an XML/CSV Parser that parses each file, extracts all entries with its relevant informations. The extracted information is then uploaded into a predefined schema to our elasticsearch engine. The predefined schema corresponds to the "Fields" listing of each processed dataset.
-
-## Step 1: Utilize Datasets 
-### Description of uploaded data
-#### EP full-text data for text analytics (EP_Patent_Applications/EP_Citations)
-<p align="center">
-  <img width="530" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_applications.png">
-</p>
-<p align="center">
-  <img width="500" src="https://github.com/cgsee1/patent-indexing/blob/master/dataset_citations.png">
-</p>
-<p align="center">
-  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations.png">
-</p>
-<p align="center">
-  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/ep_citations_log.png">
-</p>
-<p align="center">
-  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/amounts.png">
-</p>
-
-#### New Dataframe, combined from EP_Patent_Applications/EP_Citations (to be described)
-
-<p align="center">
-  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/dataframe_statistics.png">
-</p>
-
-# Technical FAQ
-
-## patent-indexing
-1. parse patent XML files with python and extract patent ID and claim for each patent
-2. index patents with elasticsearch, which is running on our isfet server
-
-#### To access elasticsearch on isfet from our idun server:
-1. connect with ssh to idun
-2. activate your pythonvirtual environment, eg;
-source activate tensorflowenv
-
-3. install elasticsearch dependency from https://elasticsearch-py.readthedocs.io/en/master/ 
-pip install elasticsearch
-4. start python session or jupyter notebook
-python
-5. connect to elasticsearch 
-from elasticsearch import Elasticsearch
-ES = Elasticsearch(['172.16.64.23:9200'])
-print(ES.indices.exists('new_telegraph’))
-
-#### es_helpers.py
-This file is two years old so it might not work with the current elasticsearch version 7.
-Use this as example code to create indices.
-
-#### es_mappings.json
-This file contains a so called mapping: https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html
