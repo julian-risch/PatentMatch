@@ -60,9 +60,10 @@ Elasticsearch is a search engine that allows to query indexed data. To make use 
 ## Step 1: Start creating and CSV dataset: Filter categories and separate claims
 The data stored in Elasticsearch will be used from now on to create and structure the dataset step by step. The results themselves are done in CSV's, the data in Elasticsearch is not changed. Since we later used the same scripts to generate not only positive (category X) but also negative samples (category A), only scripts with major differences are separated accordingly. We produce a CSV file, where each row contains information about the "Patent Application ID", "Patent Citation ID" (one quoted patent in search report, the ID format does not correspond to the Patent Application ID in Elasticsearch, but contains the original data patent id), "Application Claim Number" (number of the claim in the patent), "Application Claim Text" (the original claim text), "Related Passages Against Claim" (information from the Search Report Writer which passages of the cited patent are relevant) and "Category" (Category X for positive /A for negative) Each date contains only one claim. All patents that are included in the data are filtered for containing information within the fields "citation_ids" and "claims", as well as citations in the Search Report of category X or A. 
 A general remark to the linked scripts: As we create one dataset for positive samples and another dataset for negatives samples, we process them separaretly with the help of the same scripts. Usually there is only an adjustment regarding the passed input files/paths. Input files/paths and potential authentification credentials have to adjusted individually to get the scripts working. Two separate scripts are only linked, if major differences occur in the script.
-<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/1_createDataFrameClaims_positiveSamples.py'>---> Go to file for positive samples <---</a>
-<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/1_createDataFrameClaims_NegativeSamples.py'>---> Go to file for negative samples <---</a>
 
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/1_createDataFrameClaims_positiveSamples.py'>---> Go to file for positive samples <---</a>
+  
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/1_createDataFrameClaims_NegativeSamples.py'>---> Go to file for negative samples <---</a>
 
 # Technical FAQ
 
