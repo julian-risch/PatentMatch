@@ -65,6 +65,45 @@ A general remark to the linked scripts: As we create one dataset for positive sa
   
 <a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/1_createDataFrameClaims_NegativeSamples.py'>---> Go to file for negative samples <---</a>
 
+## Step 2: Structuring the CSV dataset: Standardize data format of paragraph references
+A second parsing step standardizes the data format of paragraph references. References like “[paragraph 23]-[paragraph 28]” or “0023 - 28” are converted to complete enumerations of paragraph numbers “[23,24,25,26,27,28]”. References by patent examiners comprise not only text paragraphs but also figures, figure captions or the whole document. In the standardization process, all references that do not resolve to text paragraphs are discarded.
+Due to the massive amount of data to be processed, errors have regularly occurred after several hundred thousand processed patents. Therefore this script was executed several times (about 10 times). The CSV's were subsequently merged into a single CSV.
+
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/2_extractCitedPatentText.py'>---> Go to file for paragraph standardization <---</a>
+  
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/3_mergeFramesWithExtractedParagraphes.py'>---> Go to file for merging the CSVs <---</a>
+  
+## (Optional) Step 3: Obtaining equivalent patent ids for dataset
+The same patents are often published in several jurisdictions in order to enjoy international legal protection. In this optional step (that we not used for the final data set), all patents from Elasticsearch are checked for equivalent identifiers from other geographic jurisdictions. This allows the subsequent extraction of cited passages from the cited search report patents if the equivalent patent from another jurisdiction is indexed in Elasticsearch. For example, for a citation on a US patent, the equivalent EU patent could be found and this could be used for the extraction of the relevant text passages and vice versa. The first script requests the <a href='https://www.epo.org/searching-for-patents/data/web-services/ops_de.html'>--->official Open Patent Services API of the European Patent Office<---</a> (registration necessary) for obtaining equivalent ids for all relevant Elasticsearch patents that are contained in our dataset. We experienced difficulties while requesting the (free/non-paid) Open Patent Services API on a very high frequency basis. Therefore, we had to restart the script several times and produced several outputs. The second script parses each output log of the first script, merges them and enriches the csv from step 2. 
+  
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/3_optional_opsAPI.py'>---> Go to file for OPS API Requests<---</a>
+  
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/3_optional_parseEquivalentsLog.py'>---> Go to file for parsing the API logs<---</a>
+
+## Step 4: Extracting the paragraph text passages of the cited patents
+In this step, we use the Elasticsearch index to resolve the referenced paragraph numbers (together with the corresponding document identifiers) to the paragraph texts. Similarly, we resolve the full texts corresponding to the claim numbers. Again, this script was executed several times to continue work after thrown errors. Several CSVs were generated and subsequentlly merged by the second script. To execute the script with the optional step 3, merely uncomment the marked lines for the desired purpose. As we dont need the information about equivalent ids after this step anymore, the final dataset drops the relevant column. To not loose the information, the script contains a method to save each patent (key) where we could obtain at least one equivalent (values) to a dictionary that is saved as a pickle object to disk. 
+
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/4_createFrameWithParagraphTexts_withoutEquivalents.py'>---> Go to file for extracting cited paragraph texts<---</a>
+  
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/5_mergeFramesWithExtractedParagraphes.py'>--->Go to file for merging files from first script<---</a>
+  
+## Step 5: Creating the final dataset
+
+The final data set is generated with the first script. Until now, all relevant passages from a cited patent for ONE claim were available unseparated (that means one cell with concatened paragraph text). In this script, the dataset is structured so that each date consists of exactly one claim and one paragraph. The output is the final dataset, which consists of a master and satellite CSV (for positive and negative samples). The master CSV contains (separately for positive / negative samples) global primary keys (incremented) for the claims with their respective text and referenced paragraphs. The satellite CSV contains the global claim keys and their text, as well as exactly one cited paragraph to this claim and further information on this date.
+
+Through the second script, we combine positive and negative samples into a global dataset and split it into train, validation and test set.
+We obtain a global dataset that consists of a total of 6.259.703 samples, where each sample contains a claim text, a referenced paragraph text, and a label indicating the
+type of the reference (“X” document or “A” document). We also provide two variations of the data for simplified usage in machine learning scenarios. The first variation balances the label distributions by downsampling the majority class. For each sample with a claim text and a referenced paragraph labeled “X”, there is also a sample with the same claim text with a different referenced paragraph labeled “A” and vice versa. This balanced training set consists of 347.880 samples. However, in this version of the dataset, different claim texts can have different numbers of references. The number of “X” and “A” labels is only balanced for each claim text itself. The second variation balances not only the label distribution but also the distribution of claim texts. Further downsampling ensures that there is exactly one sample with label “X” and one sample with label
+“A” for each claim text. As a result, every claim in the dataset occurs in exactly two samples. This restriction reduces the dataset to 25.340 samples.
+
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/6_createDatasetsFromCSV.py'>--->Go to file for creating master and satellite datasets<---</a>
+  
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/7_createDatasets.py'>--->Go to file for generating train/validation/test splits (global dataset using all positive and negative samples)<---</a>
+ 
+<a href='tba'>--->Go to file for generating train/validation/test splits (variation one)<---</a>
+  
+<a href='tba'>--->Go to file for generating train/validation/test splits (variation two)<---</a>
+
 # Technical FAQ
 
 ## patent-indexing
