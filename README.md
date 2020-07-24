@@ -1,11 +1,14 @@
 # Documentation
 
 ## Step 0: Parse and utilize datasets 
-The basis of our dataset is the “EP full-text data for text analytics” by the EPO. It contains the XMLformatted full-texts and publication meta-data of all filed patent applications and published patent documents processed by the EPO since 1978. From 2012 onwards, the search reports for all patent applications are also included. In these reports, patent examiners cite paragraphs from prior art documents if these paragraphs are relevant for judging the novelty and inventive step of an application claim. While
-there are no search reports available for applications filed before 2012, these older applications are still contained in our dataset because their corresponding published patent documents are frequently referenced as prior art. We use the available search reports to create a dataset of claims of patent applications matched with prior art, more precisely, paragraphs of cited “X” documents and “A” documents. Our data processing pipeline uses Elasticsearch for storing and searching through this large corpus of
-about 200GB text data. As a first step, an XML parser extracts the full text and meta-data from the raw XML files. Further, for each citation within a search report, it extracts claim number, patent application ID, date, paragraph number, and the type of the references, i.e., “X” document or “A” document.
+The basis of our dataset is the <a href='https://www.epo.org/searching-for-patents/data/bulk-data-sets/text-analytics.html'>EP full-text data for text analytics</a> by the EPO. It contains the XML formatted full-texts and publication meta-data of all filed patent applications and published patent documents processed by the EPO since 1978. From 2012 onwards, the search reports for all patent applications are also included. In these reports, patent examiners cite paragraphs from prior art documents if these paragraphs are relevant for judging the novelty and inventive step of an application claim. While there are no search reports available for applications filed before 2012, these older applications are still contained in our dataset because their corresponding published patent documents are frequently referenced as prior art. We use the available search reports to create a dataset of claims of patent applications matched with prior art, more precisely, paragraphs of cited “X” documents and “A” documents. Our data processing pipeline uses Elasticsearch for storing and searching through this large corpus of about 200GB text data.
 
-### Datasets
+Elasticsearch is a search engine that allows to query indexed data. To make use of the patent datasets, we upload and index the data into our elasticsearch engine, so we have an uniform and instant access to the data via queries. Further work is based on that access. As a first step, an XML parser extracts the full text and meta-data from the raw XML files. Further, for each citation within a search report, it extracts claim number, patent application ID, date, paragraph number, and the type of the references, i.e., “X” document or “A” document. The extracted information is then uploaded into a predefined schema to our elasticsearch engine. The predefined schema corresponds to the "Fields" listing of each processed dataset. 
+
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/0_parse.py'>---> Go to parsing and uploading file <---</a>
+
+
+### Datasets / Elastic Search Indices
 ##### EP full-text data for text analytics
 The dataset is split into two sub-datasets. Dataset 1 "EP_Patent_Applications" contains all patent applications with abstract, title, claims,...,citation ids. Dataset 2 "EP_Citations" contains all citation_ids with the corresponding citation information. Dataset 1 and 2 are connected via those citation ids. The unique id of dataset 1 is a concatenation of "Application Number" + "Application Category" + "Application Date". The unique id of dataset 2 is a concatenation of "Application Number" + "Application Category" + "Application Date" + "Citation Number", whereas citation number is the citation count that is annotated to each citation within one single application. To find any citations for an application, one therefore has to iterate through the citation ids and concatenate them to the current application id. Applications of this dataset do not necessarily contain all fields that are referenced in this report. Some entries are missing its application dates. Those entries are ignored and not uploaded.
 
@@ -19,19 +22,13 @@ https://www.epo.org/searching-for-patents/data/bulk-data-sets/text-analytics.htm
 - **Fields**: Application_Category, Citation_IDs, Claims, Amended_Claims_Statements, Application_Date, Citation_IPCR_Classification, Description, Abstract, Amended_Claims, Application_Number, Title, Publication_URL
 - **Number of dataset files**: 35
 - **Number of utilized files**: 35
-- **Number of documents uploaded to elasticsearch**: 
 
 ###### EP_Citations
 - **Name** "EP_Citations"
 - **Fields**: Doc_Number, Dnum, Date, Country, Kind, Publication_url, Nplcit, Name, Category_A, Category_D, Category_E, Category_P, Category_O, Category_L, Category_X, Category_T, Category_Y, Rel-passage_D, Rel-passage_A, Rel-passage_L, Rel-passage_E, Rel-passage_T, Rel-passage_P, Rel-passage_O, Rel-passage_Y, Rel-passage_X
 - **Number of dataset files**: 35
 - **Number of utilized files**: 35
-- **Number of documents uploaded to elasticsearch**: 
 
-### Dataset Patent Miner and Elasticsearch
-Elasticsearch is a search engine that allows to query indexed data. To make use of the patent datasets, we upload and index the data into our elasticsearch engine, so we have an uniform and instant access to the data via queries. Further work is based on that access. To transfer our data to elasticsearch, we deployed an XML/CSV Parser that parses each file, extracts all entries with its relevant informations. The extracted information is then uploaded into a predefined schema to our elasticsearch engine. The predefined schema corresponds to the "Fields" listing of each processed dataset. 
-
-<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/0_parse.py'>---> Go to file <---</a>
 
 ### Description of uploaded data
 #### EP full-text data for text analytics (EP_Patent_Applications/EP_Citations)
@@ -54,7 +51,7 @@ Elasticsearch is a search engine that allows to query indexed data. To make use 
 #### New Dataframe, combined from EP_Patent_Applications/EP_Citations
 
 <p align="center">
-  <img width="460" src="https://github.com/cgsee1/patent-indexing/blob/master/dataframe_statistics.png">
+  <img width="660" src="https://github.com/cgsee1/patent-indexing/blob/master/dataframe_statistics.png">
 </p>
 
 ## Step 1: Start creating and CSV dataset: Filter categories and separate claims
