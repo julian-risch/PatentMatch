@@ -73,10 +73,13 @@ Due to the massive amount of data to be processed, errors have regularly occurre
 ## (Optional) Step 3: Obtaining equivalent patent ids for dataset
 The same patents are often published in several jurisdictions in order to enjoy international legal protection. In this optional step (that we not used for the final data set), all patents from Elasticsearch are checked for equivalent identifiers from other geographic jurisdictions. This allows the subsequent extraction of cited passages from the cited search report patents if the equivalent patent from another jurisdiction is indexed in Elasticsearch. For example, for a citation on a US patent, the equivalent EU patent could be found and this could be used for the extraction of the relevant text passages and vice versa. The first script requests the <a href='https://www.epo.org/searching-for-patents/data/web-services/ops_de.html'>--->official Open Patent Services API of the European Patent Office<---</a> (registration necessary) for obtaining equivalent ids for all relevant Elasticsearch patents that are contained in our dataset. We experienced difficulties while requesting the (free/non-paid) Open Patent Services API on a very high frequency basis. Therefore, we had to restart the script several times and produced several outputs. The second script parses each output log of the first script, merges them and enriches the csv from step 2. 
   
-<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/3_optional_opsAPI.py'>---> Go to file for OPS API Requests<---</a>
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/3_optional_opsAPI.py'>--->Go to file for OPS API Requests<---</a>
   
-<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/3_optional_parseEquivalentsLog.py'>---> Go to file for parsing the API logs<---</a>
+<a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/3_optional_parseEquivalentsLog.py'>--->Go to file for parsing the API logs<---</a>
 
+Server Link Equivalents CSV: sftp://172.20.11.11/home/nialde/PatentParagraphExtraction/equivalents.csv
+
+  
 ## Step 4: Extracting the paragraph text passages of the cited patents
 In this step, we use the Elasticsearch index to resolve the referenced paragraph numbers (together with the corresponding document identifiers) to the paragraph texts. Similarly, we resolve the full texts corresponding to the claim numbers. Again, this script was executed several times to continue work after thrown errors. Several CSVs were generated and subsequentlly merged by the second script. To execute the script with the optional step 3, merely uncomment the marked lines for the desired purpose. As we dont need the information about equivalent ids after this step anymore, the final dataset drops the relevant column. To not loose the information, the script contains a method to save each patent (key) where we could obtain at least one equivalent (values) to a dictionary that is saved as a pickle object to disk. 
 
@@ -94,12 +97,28 @@ type of the reference (“X” document or “A” document). We also provide tw
 “A” for each claim text. As a result, every claim in the dataset occurs in exactly two samples. This restriction reduces the dataset to 25.340 samples.
 
 <a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/6_createDatasetsFromCSV.py'>--->Go to file for creating master and satellite datasets<---</a>
-  
+
+Server Links: 
+sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/negatives_master.csv
+sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/negatives_satellite.csv
+sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/positives_master.csv
+sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/positives_satellite.csv
+sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentX.zip
+
 <a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/7_createDatasets.py'>--->Go to file for generating train/validation/test splits (global dataset using all positive and negative samples)<---</a>
+
+Server Links: sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train.zip
+
  
 <a href='tba'>--->Go to file for generating train/validation/test splits (variation one)<---</a>
-  
+
+Server Links: sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train_balanced.zip
+
 <a href='tba'>--->Go to file for generating train/validation/test splits (variation two)<---</a>
+  
+Server Links: sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train_ultrabalanced.zip
+
+
 
 # Technical FAQ
 
