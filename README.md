@@ -77,7 +77,9 @@ The same patents are often published in several jurisdictions in order to enjoy 
   
 <a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/3_optional_parseEquivalentsLog.py'>--->Go to file for parsing the API logs<---</a>
 
-Server Link Equivalents CSV: sftp://172.20.11.11/home/nialde/PatentParagraphExtraction/equivalents.csv
+Server Link Equivalents CSV: 
+
+sftp://172.20.11.11/home/nialde/PatentParagraphExtraction/equivalents.csv
 
   
 ## Step 4: Extracting the paragraph text passages of the cited patents
@@ -99,6 +101,7 @@ type of the reference (“X” document or “A” document). We also provide tw
 <a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/6_createDatasetsFromCSV.py'>--->Go to file for creating master and satellite datasets<---</a>
 
 Server Links: 
+
 sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/negatives_master.csv
 sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/negatives_satellite.csv
 sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/positives_master.csv
@@ -107,16 +110,22 @@ sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentX.zip
 
 <a href='https://github.com/julian-risch/patent-indexing/blob/master/pipeline/7_createDatasets.py'>--->Go to file for generating train/validation/test splits (global dataset using all positive and negative samples)<---</a>
 
-Server Links: sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train.zip
+Server Links: 
+
+sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train.zip
 
  
 <a href='tba'>--->Go to file for generating train/validation/test splits (variation one)<---</a>
 
-Server Links: sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train_balanced.zip
+Server Links:
+
+sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train_balanced.zip
 
 <a href='tba'>--->Go to file for generating train/validation/test splits (variation two)<---</a>
   
-Server Links: sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train_ultrabalanced.zip
+Server Links:
+
+sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train_ultrabalanced.zip
 
 
 
