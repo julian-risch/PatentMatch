@@ -1,3 +1,6 @@
+# PatentMatch: A Dataset for Matching Patent Claims & Prior Art
+This repository accompanies the paper "PatentMatch: A Dataset for Matching Patent Claims & Prior Art" by Julian Risch, Nicolas Alder, Christoph Hewel and Ralf Krestel. It contains source code describing the data collection process. The dataset can be downloaded [here](https://hpi.de/naumann/projects/web-science/deep-learning-for-text/patentmatch.html). The paper is currently under single-blind review for publication at [CHIIR 2021](https://acm-chiir.github.io/chiir2021/).
+
 # Documentation
 
 ## Step 0: Parse and utilize datasets 
