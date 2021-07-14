@@ -152,7 +152,7 @@ sftp://172.20.11.11/mnt/data/datasets/patents/patent_matching/patentmatch_train_
 2. index patents with elasticsearch
 
 #### es_helpers.py
-This file is two years old so it might not work with the current elasticsearch version 7.
+This file is from 2019 so it might not work with the current elasticsearch version 7.
 Use this as example code to create indices.
 
 #### es_mappings.json
